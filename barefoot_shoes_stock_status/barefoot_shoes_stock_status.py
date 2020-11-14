@@ -12,7 +12,7 @@ def main():
         notify_with_class=DebugNotifier,
         notify_on_poll=["@tomikasu"],
         notify_on_update=["@tomikasu"],
-        notify_on_error=["@tomikasu"]
+        notify_on_error=["@tomikasu"],
     )
 
     subs.poll()

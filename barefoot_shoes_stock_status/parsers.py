@@ -1,6 +1,5 @@
 from selenium import webdriver
-from typing import Set
-from barefoot_shoes_stock_status.models import StockItem
+from barefoot_shoes_stock_status.models import StockItem, StockStatus
 
 
 class VivoParser:
@@ -29,7 +28,7 @@ class VivoParser:
             self._close()
         return page_source
 
-    def load_stock(self) -> Set[StockItem]:
+    def load_stock(self) -> StockStatus:
         try:
             self._open()
             driver = self.driver
@@ -43,4 +42,4 @@ class VivoParser:
             }
         finally:
             self._close()
-        return stock
+        return StockStatus(stock)

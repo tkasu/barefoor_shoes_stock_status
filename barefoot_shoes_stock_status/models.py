@@ -1,7 +1,8 @@
 import re
+import pandas as pd
 
 from dataclasses import dataclass
-from typing import Optional
+from typing import Set
 
 
 @dataclass(frozen=True)
@@ -22,3 +23,16 @@ class StockItem:
         else:
             stock_status = "In Stock"
         return cls(size_category=size_category, size=size, stock_status=stock_status)
+
+
+@dataclass(frozen=True)
+class StockStatus:
+    stock: Set[StockItem]
+
+    def to_pandas(self):
+        df = pd.DataFrame([item for item in self.stock])
+        df = df.sort_values(by="size")
+        return df
+
+    def __iter__(self):
+        return iter(self.stock)

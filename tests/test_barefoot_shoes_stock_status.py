@@ -3,13 +3,14 @@
 """Tests for `barefoot_shoes_stock_status` package."""
 
 import pytest
+import pandas as pd
 
 from typing import Set
 from click.testing import CliRunner
 
 from barefoot_shoes_stock_status import barefoot_shoes_stock_status
 from barefoot_shoes_stock_status.parsers import VivoParser
-from barefoot_shoes_stock_status.models import StockItem
+from barefoot_shoes_stock_status.models import StockItem, StockStatus
 from barefoot_shoes_stock_status import cli
 
 VIVO_TEST_URL = "https://www.vivobarefoot.com/eu/mens/outdoor/magna-trail-leather-$4-wool-mens?colour=Obsidian"
@@ -57,6 +58,20 @@ def test_vivo_str_to_stockitem_few_in_stock():
     assert stock_item.size == 47
     assert stock_item.size_category == "EU"
     assert stock_item.stock_status == "Only 4 left in stock"
+
+
+def test_stock_status_to_pandas():
+    item1 = StockItem("EU", 42, "In Stock")
+    item2 = StockItem("EU", 44, "Only 4 left")
+    status = StockStatus({item1, item2})
+    stock = status.to_pandas()
+    assert isinstance(stock, pd.DataFrame)
+    cols = stock.columns
+    assert "size_category" in cols
+    assert "size" in cols
+    assert "stock_status" in cols
+    rows, _ = stock.shape
+    assert rows == 2
 
 
 def test_command_line_interface():
