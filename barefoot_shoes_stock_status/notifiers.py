@@ -14,4 +14,21 @@ class DebugNotifier:
 
     def notify_poll(self, url: str, items: StockStatus):
         to_update_str = " ".join(self.on_poll)
-        print(to_update_str, "\n", f"Fetched new stock status for: {url}", "\n", items.to_pandas())
+        print(
+            to_update_str,
+            "\n",
+            f"Fetched new stock status for: {url}",
+            "\n",
+            items.to_pandas(),
+        )
+
+    def notify_update(self, url: str, old_items: StockStatus, new_items: StockStatus):
+        to_update_str = " ".join(self.on_update)
+        comparison_df = new_items.compare_to_older(old_items)
+        print(
+            to_update_str, "\n", f"Stock status update for: {url}", "\n", comparison_df
+        )
+
+    def notify_error(self, url: str, error):
+        to_update_str = " ".join(self.on_error)
+        print(to_update_str, "\n", f"ERROR when fetching: {url}", "\n", error)

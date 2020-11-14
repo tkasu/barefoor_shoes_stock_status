@@ -1,5 +1,6 @@
 import re
 import pandas as pd
+import numpy as np
 
 from dataclasses import dataclass
 from typing import Set
@@ -34,5 +35,29 @@ class StockStatus:
         df = df.sort_values(by="size")
         return df
 
+    def compare_to_older(self, other):
+        df = self.to_pandas()
+        if not isinstance(other, StockStatus):
+            comp_df = df.rename(
+                {"stock_status": "stock_status_new"}, errors="raise", axis=1
+            )
+            comp_df["stock_status_old"] = np.nan
+            return comp_df
+        else:
+            other_df = other.to_pandas()
+            comp_df = df.merge(
+                other_df,
+                on=["size_category", "size"],
+                how="outer",
+                suffixes=("_new", "_old"),
+            )
+            return comp_df
+
     def __iter__(self):
         return iter(self.stock)
+
+    def __eq__(self, other):
+        if not isinstance(other, StockStatus):
+            return False
+        else:
+            return self.stock == other.stock

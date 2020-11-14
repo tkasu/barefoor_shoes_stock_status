@@ -1,7 +1,7 @@
 from typing import Optional, Set
 from barefoot_shoes_stock_status.parsers import VivoParser
 from barefoot_shoes_stock_status.notifiers import DebugNotifier
-from barefoot_shoes_stock_status.models import StockItem
+from barefoot_shoes_stock_status.models import StockStatus
 
 
 class Subscriber:
@@ -9,7 +9,7 @@ class Subscriber:
     parser: VivoParser
     poll_frequency_s: int
     notifier: DebugNotifier
-    state: Optional[Set[StockItem]]
+    state: Optional[StockStatus]
 
     def __init__(
         self,
@@ -28,7 +28,15 @@ class Subscriber:
         self.notifier = notify_with_class(
             on_poll=notify_on_poll, on_update=notify_on_update, on_error=notify_on_error
         )
+        self.state = None  # TODO Add possibility to persist state to disk
 
     def poll(self):
-        new_state = self.parser.load_stock()
-        self.notifier.notify_poll(self.url, new_state)
+        try:
+            new_state = self.parser.load_stock()
+            if not self.state == new_state:
+                self.notifier.notify_update(self.url, self.state, new_state)
+                self.state = new_state
+            else:
+                self.notifier.notify_poll(self.url, new_state)
+        except Exception as e:
+            self.notifier.notify_error(self.url, e)

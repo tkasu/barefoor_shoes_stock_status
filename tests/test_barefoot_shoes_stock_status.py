@@ -4,6 +4,7 @@
 
 import pytest
 import pandas as pd
+import numpy as np
 
 from typing import Set
 from click.testing import CliRunner
@@ -72,6 +73,56 @@ def test_stock_status_to_pandas():
     assert "stock_status" in cols
     rows, _ = stock.shape
     assert rows == 2
+
+
+def test_stock_status_eq():
+    item1 = StockItem("EU", 42, "In Stock")
+    item2 = StockItem("EU", 44, "Only 4 left")
+    status1 = StockStatus({item1, item2})
+    status2 = StockStatus({item1, item2})
+    assert status1 == status2
+
+
+def test_stock_status_neq():
+    item1 = StockItem("EU", 42, "In Stock")
+    item2 = StockItem("EU", 44, "Only 4 left")
+    item3 = StockItem("EU", 40, "Out of Stock")
+    status1 = StockStatus({item1, item2})
+    status2 = StockStatus({item1, item3})
+    assert not status1 == status2
+
+
+def test_stock_comparison_df():
+    item1 = StockItem("EU", 42, "In Stock")
+    item2_old = StockItem("EU", 44, "Only 4 left")
+    item2_new = StockItem("EU", 44, "Out of Stock")
+    old_status = StockStatus({item1, item2_old})
+    new_status = StockStatus({item1, item2_new})
+    df = new_status.compare_to_older(old_status)
+    cols = df.columns
+    assert "size_category" in cols
+    assert "size" in cols
+    assert "stock_status_old" in cols
+    assert "stock_status_new" in cols
+    changed_row = df[df["size"] == 44]
+    assert changed_row["stock_status_old"].values[0] == "Only 4 left"
+    assert changed_row["stock_status_new"].values[0] == "Out of Stock"
+
+
+def test_stock_comparison_df_to_none():
+    item1 = StockItem("EU", 42, "In Stock")
+    item2 = StockItem("EU", 44, "Only 4 left")
+    old_status = None
+    new_status = StockStatus({item1, item2})
+    df = new_status.compare_to_older(old_status)
+    cols = df.columns
+    assert "size_category" in cols
+    assert "size" in cols
+    assert "stock_status_old" in cols
+    assert "stock_status_new" in cols
+    changed_row = df[df["size"] == 44]
+    assert np.isnan(changed_row["stock_status_old"].values[0])
+    assert changed_row["stock_status_new"].values[0] == "Only 4 left"
 
 
 def test_command_line_interface():
