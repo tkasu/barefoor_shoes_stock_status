@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Optional
 
 
-@dataclass
+@dataclass(frozen=True)
 class StockItem:
     size_category: str
     size: int
@@ -21,4 +21,4 @@ class StockItem:
             stock_status = stock_status.replace("(", "").replace(")", "")
         else:
             stock_status = "In Stock"
-        return cls(size_category=size_category, sigze=size, stock_status=stock_status)
+        return cls(size_category=size_category, size=size, stock_status=stock_status)

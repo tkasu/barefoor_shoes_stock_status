@@ -7,10 +7,10 @@ import pytest
 from typing import Set
 from click.testing import CliRunner
 
-from barefoor_shoes_stock_status import barefoor_shoes_stock_status
-from barefoor_shoes_stock_status.parsers import VivoParser
-from barefoor_shoes_stock_status.models import StockItem
-from barefoor_shoes_stock_status import cli
+from barefoot_shoes_stock_status import barefoot_shoes_stock_status
+from barefoot_shoes_stock_status.parsers import VivoParser
+from barefoot_shoes_stock_status.models import StockItem
+from barefoot_shoes_stock_status import cli
 
 VIVO_TEST_URL = "https://www.vivobarefoot.com/eu/mens/outdoor/magna-trail-leather-$4-wool-mens?colour=Obsidian"
 
@@ -26,7 +26,8 @@ def test_vivo_url_open():
 def test_get_sizes():
     parser = VivoParser(VIVO_TEST_URL)
     stock = parser.load_stock()
-    assert isinstance(stock[0], StockItem)
+    for size in stock:
+        assert isinstance(size, StockItem)
     eu42 = [size for size in stock if size.size == 42]
     assert len(eu42) > 0
 
