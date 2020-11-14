@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# barefoor_shoes_stock_status documentation build configuration file, created by
+# barefoot_shoes_stock_status documentation build configuration file, created by
 # sphinx-quickstart on Fri Jun  9 13:47:02 2017.
 #
 # This file is execfile()d with the current directory set to its
@@ -127,7 +127,7 @@ latex_elements = {
 latex_documents = [
     (
         master_doc,
-        "barefoor_shoes_stock_status.tex",
+        "barefoot_shoes_stock_status.tex",
         "Barefoor Shoes Stock Status Documentation",
         "Tomi Kasurinen",
         "manual",
@@ -142,7 +142,7 @@ latex_documents = [
 man_pages = [
     (
         master_doc,
-        "barefoor_shoes_stock_status",
+        "barefoot_shoes_stock_status",
         "Barefoor Shoes Stock Status Documentation",
         [author],
         1,
@@ -158,10 +158,10 @@ man_pages = [
 texinfo_documents = [
     (
         master_doc,
-        "barefoor_shoes_stock_status",
+        "barefoot_shoes_stock_status",
         "Barefoor Shoes Stock Status Documentation",
         author,
-        "barefoor_shoes_stock_status",
+        "barefoot_shoes_stock_status",
         "One line description of project.",
         "Miscellaneous",
     ),

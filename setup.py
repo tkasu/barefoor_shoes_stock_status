@@ -40,17 +40,17 @@ setup(
     description="Simple scraper so my wife can get the latest stock status of her favourite barefoot shoes",
     entry_points={
         "console_scripts": [
-            "barefoor_shoes_stock_status=barefoor_shoes_stock_status.cli:main",
+            "barefoot_shoes_stock_status=barefoot_shoes_stock_status.cli:main",
         ],
     },
     install_requires=requirements,
     license="MIT license",
     long_description=readme + "\n\n" + history,
     include_package_data=True,
-    keywords="barefoor_shoes_stock_status",
-    name="barefoor_shoes_stock_status",
+    keywords="barefoot_shoes_stock_status",
+    name="barefoot_shoes_stock_status",
     packages=find_packages(
-        include=["barefoor_shoes_stock_status", "barefoor_shoes_stock_status.*"]
+        include=["barefoot_shoes_stock_status", "barefoot_shoes_stock_status.*"]
     ),
     setup_requires=setup_requirements,
     test_suite="tests",

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Tests for `barefoor_shoes_stock_status` package."""
+"""Tests for `barefoot_shoes_stock_status` package."""
 
 import pytest
 
@@ -32,7 +32,7 @@ def test_command_line_interface():
     runner = CliRunner()
     result = runner.invoke(cli.main)
     assert result.exit_code == 0
-    assert "barefoor_shoes_stock_status.cli.main" in result.output
+    assert "barefoot_shoes_stock_status.cli.main" in result.output
     help_result = runner.invoke(cli.main, ["--help"])
     assert help_result.exit_code == 0
     assert "--help  Show this message and exit." in help_result.output

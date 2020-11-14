@@ -1,1 +1,1 @@
-"""Unit test package for barefoor_shoes_stock_status."""
+"""Unit test package for barefoot_shoes_stock_status."""
