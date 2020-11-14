@@ -10,12 +10,12 @@ def main():
         parser_class=VivoParser,
         poll_frequency=1,
         notify_with_class=DebugNotifier,
-        notify_on_poll=["@tomikasu"],
+        notify_on_poll=[""],
         notify_on_update=["@tomikasu"],
         notify_on_error=["@tomikasu"],
     )
 
-    subs.poll()
+    subs.subscribe()
 
 
 if __name__ == "__main__":

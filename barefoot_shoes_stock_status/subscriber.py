@@ -1,4 +1,5 @@
-from typing import Optional, Set
+from time import sleep
+from typing import Optional
 from barefoot_shoes_stock_status.parsers import VivoParser
 from barefoot_shoes_stock_status.notifiers import DebugNotifier
 from barefoot_shoes_stock_status.models import StockStatus
@@ -40,3 +41,8 @@ class Subscriber:
                 self.notifier.notify_poll(self.url, new_state)
         except Exception as e:
             self.notifier.notify_error(self.url, e)
+
+    def subscribe(self):
+        while True:
+            self.poll()
+            sleep(self.poll_frequency_s)
