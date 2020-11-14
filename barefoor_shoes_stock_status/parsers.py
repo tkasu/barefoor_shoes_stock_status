@@ -1,5 +1,6 @@
-from typing import Set
 from selenium import webdriver
+from typing import List
+from barefoor_shoes_stock_status.models import StockItem
 
 
 class VivoParser:
@@ -28,14 +29,18 @@ class VivoParser:
             self._close()
         return page_source
 
-    def load_stock(self) -> Set[str]:
+    def load_stock(self) -> List[StockItem]:
         try:
             self._open()
             driver = self.driver
             size_select_elem = driver.find_element_by_class_name("select")
             sizes = size_select_elem.find_elements_by_tag_name("option")
-            stock = {size.get_attribute("text") for size in sizes}
-            stock = {size for size in stock if not size.startswith("Size")}
+            stock = [size.get_attribute("text") for size in sizes]
+            stock = [
+                StockItem.from_vivo_str(size)
+                for size in stock
+                if not size.startswith("Size")
+            ]
         finally:
             self._close()
         return stock
