@@ -17,7 +17,11 @@ class Subscriber:
         self.parser = parser
         self.poll_frequency_s = poll_frequency * 60
         self.notifier = notifier
-        self.state = None  # TODO Add possibility to persist state to disk
+        try:
+            persisted_state = StockStatus.from_statefile(url)
+            self.state = persisted_state
+        except FileNotFoundError:
+            self.state = None
 
     def poll(self):
         try:
@@ -25,6 +29,7 @@ class Subscriber:
             if not self.state == new_state:
                 self.notifier.notify_update(self.url, self.state, new_state)
                 self.state = new_state
+                self.state.persist_state()
             else:
                 self.notifier.notify_poll(self.url, new_state)
         except Exception as e:

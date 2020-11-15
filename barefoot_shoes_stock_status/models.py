@@ -1,9 +1,12 @@
 import re
 import pandas as pd
+import pickle
 import numpy as np
+import os
 
+from hashlib import md5
 from dataclasses import dataclass
-from typing import Set
+from typing import Set, Optional
 
 
 @dataclass(frozen=True)
@@ -29,6 +32,7 @@ class StockItem:
 @dataclass(frozen=True)
 class StockStatus:
     stock: Set[StockItem]
+    url: Optional[str] = None
 
     def to_pandas(self):
         df = pd.DataFrame([item for item in self.stock])
@@ -52,6 +56,23 @@ class StockStatus:
                 suffixes=("_new", "_old"),
             )
             return comp_df
+
+    def persist_state(self):
+        with open(self.filepath(self.url), "wb") as f:
+            b = pickle.dumps(self)
+            f.write(b)
+
+    @classmethod
+    def from_statefile(cls, url: str):
+        filepath = cls.filepath(url)
+        with open(filepath, "rb") as f:
+            return pickle.loads(f.read())
+
+    @staticmethod
+    def filepath(url):
+        if not url:
+            raise ValueError("Can't get filename without 'url' set.")
+        return os.path.join("state_files", md5(url.encode()).hexdigest())
 
     def __iter__(self):
         return iter(self.stock)

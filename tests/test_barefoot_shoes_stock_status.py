@@ -124,6 +124,15 @@ def test_stock_comparison_df_to_none():
     assert np.isnan(changed_row["stock_status_old"].values[0])
     assert changed_row["stock_status_new"].values[0] == "Only 4 left"
 
+def test_save_status_state():
+    item1 = StockItem("EU", 42, "In Stock")
+    item2 = StockItem("EU", 44, "Only 4 left")
+    status = StockStatus({item1, item2}, url="https://dummy.net")
+
+    status.persist_state()
+    status_from_statefile = StockStatus.from_statefile("https://dummy.net")
+    assert status == status_from_statefile
+
 
 def test_command_line_interface():
     """Test the CLI."""

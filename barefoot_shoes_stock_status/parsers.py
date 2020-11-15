@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
 from barefoot_shoes_stock_status.models import StockItem, StockStatus
 
 
@@ -32,4 +33,4 @@ class VivoParser:
             }
         finally:
             driver.close()
-        return StockStatus(stock)
+        return StockStatus(stock, url=self.url)
