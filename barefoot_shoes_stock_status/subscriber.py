@@ -9,26 +9,14 @@ class Subscriber:
     url: str
     parser: VivoParser
     poll_frequency_s: int
-    notifier: DebugNotifier
     state: Optional[StockStatus]
 
-    def __init__(
-        self,
-        url,
-        parser_class,
-        poll_frequency,
-        notify_with_class,
-        notify_on_poll,
-        notify_on_update,
-        notify_on_error,
-    ):
+    def __init__(self, url, parser_class, poll_frequency, notifier):
         self.url = url
         parser = parser_class(url)
         self.parser = parser
         self.poll_frequency_s = poll_frequency * 60
-        self.notifier = notify_with_class(
-            on_poll=notify_on_poll, on_update=notify_on_update, on_error=notify_on_error
-        )
+        self.notifier = notifier
         self.state = None  # TODO Add possibility to persist state to disk
 
     def poll(self):
